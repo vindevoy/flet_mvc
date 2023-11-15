@@ -51,7 +51,7 @@ class DemoModel(FletMVCModel):
     def options(self):
         return list(self._genders.keys())
 
-    def option_name(self, selected_value: str):
+    def option_code(self, selected_value: str):
         return self._genders[selected_value]
 ```
 
@@ -108,7 +108,7 @@ class DemoController(FletMVCController):
         self.view.change_theme_mode(ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT)
 
     def dropdown_change(self, e: ft.ControlEvent = None):  # You must have the ControlEvent as parameter
-        self.view.textfield.value = self.model.option_name(self.view.dropdown.value)
+        self.view.textfield.value = self.model.option_code(self.view.dropdown.value)
         self.update_view()
 
     def button_click(self, e: ft.ControlEvent = None):

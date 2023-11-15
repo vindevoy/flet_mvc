@@ -12,7 +12,7 @@ class DemoController(FletMVCController):
     def dropdown_change(self, e: ft.ControlEvent = None):  # You must have the ControlEvent as parameter
         assert isinstance(e, ft.ControlEvent)
 
-        self.view.textfield.value = self.model.option_name(self.view.dropdown.value)
+        self.view.textfield.value = self.model.option_code(self.view.dropdown.value)
         self.update_view()
 
     def button_click(self, e: ft.ControlEvent = None):

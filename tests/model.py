@@ -11,5 +11,5 @@ class DemoModel(FletMVCModel):
     def options(self):
         return list(self._genders.keys())
 
-    def option_name(self, selected_value: str):
+    def option_code(self, selected_value: str):
         return self._genders[selected_value]
