@@ -2,12 +2,10 @@ import flet as ft
 
 from controller import SettingsController
 from model import SettingsModel
-from mvc import MVCPattern
+from mvc import MVCLinker
 from view import SettingsView
 
-
-pattern = MVCPattern(SettingsModel, SettingsView, SettingsController)
-view = pattern.view
+settings = MVCLinker(SettingsModel, SettingsView, SettingsController)
 
 
-ft.app(target=view.build)
+ft.app(target=settings.build)

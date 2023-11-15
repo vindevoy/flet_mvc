@@ -4,21 +4,20 @@ from mvc import MVCController
 
 
 class SettingsController(MVCController):
-    @staticmethod
-    def change_mode(e: ft.ControlEvent):
-        p: ft.Page = e.page
-        p.theme_mode = ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT
-        p.update()
+    def change_mode(self, e: ft.ControlEvent):
+        assert isinstance(e, ft.ControlEvent)
 
-    def dropdown_change(self, e: ft.ControlEvent):
-        dropdown: ft.Dropdown = e.control
-        textfield: ft.TextField = self.view.textfield
+        self.view.change_theme_mode(ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT)
 
-        textfield.value = self.model.option_name(dropdown.value)
-        # could use e.data also in this case
-        textfield.update()
+    def dropdown_change(self, e: ft.ControlEvent = None):  # You must have the ControlEvent as parameter
+        assert isinstance(e, ft.ControlEvent)
 
-    def button_click(self, e: ft.ControlEvent):
+        self.view.textfield.value = self.model.option_name(self.view.dropdown.value)
+        self.update_view()
+
+    def button_click(self, e: ft.ControlEvent = None):
+        assert isinstance(e, ft.ControlEvent)
+
         dlg = ft.AlertDialog(
             modal=True,
             actions=[
@@ -29,31 +28,4 @@ class SettingsController(MVCController):
             title=ft.Text(f"Close the application ?")
         )
 
-        e.page.dialog = dlg
-        dlg.open = True
-        e.page.update()
-
-    @staticmethod
-    def close_dialog(e: ft.ControlEvent):
-        e.page.dialog.open = False
-        e.page.update()
-
-    @staticmethod
-    def close_application(e: ft.ControlEvent):
-        e.page.window_close()
-
-#
-# def _named_controls(page: ft.Control | ft.Page):
-#     named = {}
-#
-#     try:
-#         for control in page.controls:
-#             if control.key not in [None, ""]:
-#                 named[control.key] = control
-#
-#             named = {**named, **_named_controls(control)}
-#             # add to the dict of this control, the dict of the controls deeper down the control tree
-#     except AttributeError:
-#         pass  # container does not have a controls property
-#
-#     return named
+        self.open_dialog(dlg)
