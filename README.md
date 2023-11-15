@@ -141,6 +141,11 @@ demo_app = FletMVCApplication(model_class=DemoModel,
 demo_app.run()
 ```
 
+*Final note: vindevoy and sidviny are the same person:*
+
+- *vindevoy: my personal account*
+- *sidviny: my account when working from ArcelorMittal Ghent*
+
 
 
 
