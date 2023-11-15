@@ -1,3 +1,5 @@
+import flet as ft
+
 from flet_mvc.controller import FletMVCController
 from flet_mvc.model import FletMVCModel
 from flet_mvc.view import FletMVCView
@@ -49,3 +51,20 @@ class FletMVCApplication:
         ft.app(target=my_flet_mvc_app.build)  # This will pass the page into this function
         """
         self.view.build(page)
+
+    def run(self):
+        """
+        This is the start point for your application.  After you have created a FletMVCApp and passed
+        the Model, View and Controller class, you must start this application by calling the run() method.
+
+        :return: None
+
+        settings_app = FletMVCApplication(model_class=DemoModel,
+                                  view_class=DemoView,
+                                  controller_class=DemoController)
+
+        settings_app.run()
+
+        """
+        ft.app(target=self.build)
+

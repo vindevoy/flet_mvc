@@ -1,5 +1,3 @@
-import flet as ft
-
 from controller import DemoController
 from flet_mvc.app import FletMVCApplication
 from model import DemoModel
@@ -10,4 +8,4 @@ settings_app = FletMVCApplication(model_class=DemoModel,
                                   controller_class=DemoController)
 
 
-ft.app(target=settings_app.build)
+settings_app.run()
