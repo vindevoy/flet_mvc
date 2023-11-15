@@ -21,8 +21,11 @@ class DemoView(FletMVCView):
                                 on_change=self.controller.change_mode)
         self.dropdown = ft.Dropdown(ref=self.dropdown,
                                     options=[ft.dropdown.Option(o) for o in self.model.options],
-                                    on_change=self.controller.dropdown_change)
-        self.textfield = ft.TextField(ref=self.textfield)
+                                    on_change=self.controller.dropdown_change,
+                                    label="Choose gender:")
+        self.textfield = ft.TextField(ref=self.textfield,
+                                      label="The code for this gender is:",
+                                      disabled=True)
         self.button = ft.ElevatedButton(ref=self.button,
                                         text="Close",
                                         on_click=self.controller.button_click)

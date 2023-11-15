@@ -2,7 +2,7 @@ from flet_mvc.model import FletMVCModel
 
 
 class DemoModel(FletMVCModel):
-    _genders = {"M": "Male", "F": "Female", "NA": "No answer"}
+    _genders = {"Male": "M", "Female": "F", "No answer": "NA"}
 
     def __init__(self):
         super().__init__()
