@@ -10,7 +10,7 @@ class CountriesListView(FletMVCView):
         self.button = ft.Ref[ft.ElevatedButton]()
         self.view = ft.Ref[ft.View]()
 
-    def build(self):
+    def build(self) -> ft.View:
         options = [ft.dropdown.Option(c) for c in self.model.get_country_list()]
         self.dropdown = ft.Dropdown(ref=self.dropdown, col=3, options=options, label="Select a country")
         self.button = ft.ElevatedButton(ref=self.button, col=2, text="See data", on_click=self.controller.show_data)
@@ -29,7 +29,7 @@ class CountryDetailView(FletMVCView):
         self.button = ft.Ref[ft.ElevatedButton]()
         self.view = ft.Ref[ft.View]()
 
-    def build(self, country: str):
+    def build(self, country: str) -> ft.View:
         self.text = ft.Text(ref=self.text, value=f"Life expectancy for {country}")
 
         cols = [ft.DataColumn(ft.Text("Year"), numeric=True),
