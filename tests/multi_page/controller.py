@@ -6,7 +6,7 @@ class CountriesController(FletMVCController):
         super().__init__()
 
     def show_home(self, _):  # _: instead of e:ft.ControlEvent
-        self.app.goto("/")
+        self.goto("/")
 
     def show_data(self, _):  # _: instead of e:ft.ControlEvent
-        self.app.goto(f"/country/{self.view.dropdown.value}")
+        self.goto(f"/country/{self.view.dropdown.value}")
