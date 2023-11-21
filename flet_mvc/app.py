@@ -1,5 +1,6 @@
 import flet as ft
 from flet_core import RouteChangeEvent, TemplateRoute
+from sqlalchemy import create_engine
 
 from flet_mvc.module import FletMVCModule
 from flet_mvc.route import FletMVCRoute
@@ -9,12 +10,14 @@ class FletMVCApplication:
     def __init__(self, title: str, window_width: int = 1600, window_height: int = 900):
         """
         Constructor that creates a dummy page, which will later be detailed in the build method.
-        Also creates the basic properties of the application and the list of routes
+        Also creates the basic properties of the application, a placeholder for the database engine
+        and the list of routes.
         """
         self.title: str = title
         self.window_width = window_width
         self.window_height = window_height
 
+        self.__engine: str = ""
         self.__page: ft.Page = None  # noqa
         self.__routes: list[FletMVCRoute] = []
 
@@ -60,7 +63,7 @@ class FletMVCApplication:
         """
         self.__page.go(path)
 
-    def update(self, controls: list[ft.Control] = None) -> None:
+    def refresh(self, controls: list[ft.Control] = None) -> None:
         """
         Update the page.  Either update it completely, or only the controls listed.
 
@@ -87,7 +90,7 @@ class FletMVCApplication:
         """
         self.__page.dialog = dlg
         dlg.open = True
-        self.update()
+        self.refresh()
 
     def close_dialog(self, e: ft.ControlEvent) -> None:
         """
@@ -117,6 +120,9 @@ class FletMVCApplication:
 
         self.__page.window_close()
 
+    def bind_database(self, connection_string: str):
+        self.__engine = create_engine(connection_string, echo=True)
+
     def change_theme_mode(self, mode: ft.ThemeMode) -> None:
         """
         Change the theme mode from light to dark, or vice versa.
@@ -128,7 +134,7 @@ class FletMVCApplication:
         :return: None
         """
         self.__page.theme_mode = mode
-        self.update()
+        self.refresh()
 
     def __build(self, page: ft.Page) -> None:
         """
@@ -198,4 +204,4 @@ class FletMVCApplication:
             elif route.path == e.page.route:
                 self.__page.views.append(route.module.view.build())
 
-        self.update()
+        self.refresh()

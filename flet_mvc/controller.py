@@ -23,7 +23,7 @@ class FletMVCController:
         """
         self.app.goto(path=path)
 
-    def update(self, controls: list[ft.Control] = None) -> None:
+    def refresh(self, controls: list[ft.Control] = None) -> None:
         """
         Convenience method to pass from the level of the controller to the level of the application with the page.
         For full documentation, see the same method on the app (application) level.
@@ -32,7 +32,7 @@ class FletMVCController:
 
         :return: None
         """
-        self.app.update(controls=controls)
+        self.app.refresh(controls=controls)
 
     def open_dialog(self, dlg: ft.AlertDialog) -> None:
         """
