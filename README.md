@@ -16,7 +16,7 @@ I wanted to make this in the MVC pattern.  I ran into a problem when I wanted to
 
 In that question, ndonkoHenri posted that I should have a look at https://github.com/o0Adrian/flet-mvc.  Which I did of course.  However, the DataPoints and the approach in that project is not the way I like things.  Although I have not tried all the stuff in there, it looks a bit overcomplicated to me, especially the approach with those DataPoints.  That's why I started this.  It's another approach on the same problem.
 
-*Note: I am not critisizing that project nor the approach.  It could well be that it is, or will be, better than mine.  I am just taking another approach.  For now as a proof of concept.*
+*Note: I am not criticizing that project nor the approach.  It could well be that it is, or will be, better than mine.  I am just taking another approach.  For now as a proof of concept.*
 
 ## Purpose
 
@@ -29,8 +29,12 @@ This repo shows an approach towards using the Model-View-Controller pattern in F
 
 To run this package, I used a conda environment using the following packages:
 
-- Python
-- Flet
+- python (3.11)
+- flet
+- pandas
+- plotly
+- pyyaml
+- sqlalchemy
 
 ### Running
 

@@ -26,6 +26,7 @@ class CountriesModel(FletMVCModel):
     def __get_country_data(self, country_name: str):
         countries = self._countries
         countries = countries[countries["country"] == country_name].copy()
+        countries["lifeExp"] = countries["lifeExp"].round(1)
         countries.drop(["country"], axis=1, inplace=True)
 
         return countries.to_dict("records")

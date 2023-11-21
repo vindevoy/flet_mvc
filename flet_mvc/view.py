@@ -1,11 +1,10 @@
-from flet_mvc.component import FletMVCComponent
-
-
-class FletMVCView(FletMVCComponent):
+class FletMVCView:
     def __init__(self):
         """
-        Constructor that removes itself from the 3 MVC components as it makes no sense to point to itself.
+        Constructor to set the parent app which will be filled out when the MVC module is added to the app.
+        It also sets the 2 other components in the MVC pattern.  That will be filled out when the 3 are combined
+        in the MVC module's constructor.
         """
-        super().__init__()
-
-        del self.view
+        self.app = None
+        self.model = None
+        self.controller = None
