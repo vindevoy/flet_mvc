@@ -1,4 +1,4 @@
-from module import FletMVCModule
+from flet_mvc.module import FletMVCModule
 
 
 class FletMVCRoute:

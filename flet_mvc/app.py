@@ -1,8 +1,8 @@
 import flet as ft
 from flet_core import RouteChangeEvent, TemplateRoute
 
-from module import FletMVCModule
-from route import FletMVCRoute
+from flet_mvc.module import FletMVCModule
+from flet_mvc.route import FletMVCRoute
 
 
 class FletMVCApplication:
