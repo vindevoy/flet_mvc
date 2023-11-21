@@ -41,6 +41,9 @@ Run the main.py file in the /tests directory.  It will open a desktop Flet appli
 ### Model
 
 ```
+from flet_mvc.model import FletMVCModel
+
+
 class DemoModel(FletMVCModel):
     _genders = {"Male": "M", "Female": "F", "No answer": "NA"}
 
@@ -71,11 +74,9 @@ class DemoView(FletMVCView):
         self.dropdown = ft.Ref[ft.Dropdown]()
         self.textfield = ft.Ref[ft.TextField]()
         self.button = ft.Ref[ft.ElevatedButton]()
-        self.column = ft.Ref[ft.Column]()
+        self.view = ft.Ref[ft.View]()
 
-    def build(self, page) -> None:
-        super().build(page=page)
-
+    def build(self) -> ft.View:
         self.switch = ft.Switch(ref=self.switch,
                                 label="Dark mode",
                                 on_change=self.controller.change_mode)
@@ -89,10 +90,10 @@ class DemoView(FletMVCView):
         self.button = ft.ElevatedButton(ref=self.button,
                                         text="Close",
                                         on_click=self.controller.button_click)
-        self.column = ft.Column(ref=self.column,
-                                controls=[self.switch, self.dropdown, self.textfield, self.button])
 
-        self.page.add(self.column)
+        self.view = ft.View(controls=[self.switch, self.dropdown, self.textfield, self.button])
+
+        return self.view
 ```
 
 ### Controller
@@ -105,13 +106,19 @@ from flet_mvc.controller import FletMVCController
 
 class DemoController(FletMVCController):
     def change_mode(self, e: ft.ControlEvent):
-        self.view.change_theme_mode(ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT)
+        assert isinstance(e, ft.ControlEvent)
+
+        self.change_theme_mode(ft.ThemeMode.DARK if e.control.value else ft.ThemeMode.LIGHT)
 
     def dropdown_change(self, e: ft.ControlEvent = None):  # You must have the ControlEvent as parameter
+        assert isinstance(e, ft.ControlEvent)
+
         self.view.textfield.value = self.model.option_code(self.view.dropdown.value)
-        self.update_view()
+        self.update()
 
     def button_click(self, e: ft.ControlEvent = None):
+        assert isinstance(e, ft.ControlEvent)
+
         dlg = ft.AlertDialog(
             modal=True,
             actions=[
@@ -128,17 +135,19 @@ class DemoController(FletMVCController):
 ### Application putting it all together
 
 ```
-from controller import DemoController
+from demo_app.controller import DemoController
+from demo_app.model import DemoModel
+from demo_app.view import DemoView
 from flet_mvc.app import FletMVCApplication
-from model import DemoModel
-from view import DemoView
+from module import FletMVCModule
 
-demo_app = FletMVCApplication(model_class=DemoModel,
-                              view_class=DemoView,
-                              controller_class=DemoController)
+app = FletMVCApplication("Simple demo app")
+
+settings_module = FletMVCModule(model_class=DemoModel, view_class=DemoView, controller_class=DemoController)
 
 
-demo_app.run()
+app.add_route("/", settings_module)
+app.run()
 ```
 
 *Final note: vindevoy and sidviny are the same person:*
