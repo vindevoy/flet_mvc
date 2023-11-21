@@ -1,70 +1,69 @@
 import flet as ft
+from flet_core import RouteChangeEvent, TemplateRoute
 
-from flet_mvc.controller import FletMVCController
-from flet_mvc.model import FletMVCModel
-from flet_mvc.view import FletMVCView
+from module import FletMVCModule
+from route import FletMVCRoute
 
 
 class FletMVCApplication:
-    def __init__(self,
-                 model_class: FletMVCModel.__class__,
-                 view_class: FletMVCView.__class__,
-                 controller_class: FletMVCController.__class__):
-        """
-        This class links the 3 parts of an MVC application together.  For each part, it will set the 2 other parts.
+    def __init__(self, title: str):
+        self.page: ft.Page = None  # noqa
+        self.title = title
 
-        :param model_class: flet_mvc.FletMVCModel:
-            the FletMVCModel class name (no instance!)
+        self.routes: list[FletMVCRoute] = []
 
-        :param view_class: flet_mvc.FletMVCView:
-            the FletMVCView class name (no instance!)
+    def add_route(self, path: str, module: FletMVCModule):
+        module.model.app = self
+        module.view.app = self
+        module.controller.app = self
 
-        :param controller_class: flet_mvc.FletMVCController:
-            the FletMVCController class name (no instance!)
-        """
-        # Instantiate the classes.  You must pass the class, not an instance !
-        self.model = model_class()
-        self.view = view_class()
-        self.controller = controller_class()
+        route = FletMVCRoute(path=path, module=module)
+        self.routes.append(route)
 
-        # Update the model to make controller and view accessible
-        self.model.view = self.view
-        self.model.controller = self.controller
+    def goto(self, path: str):
+        self.page.go(path)
 
-        # Update the view to make the model and controller accessible
-        self.view.model = self.model
-        self.view.controller = self.controller
+    def route_change(self, e: RouteChangeEvent):
+        self.page = e.page
 
-        # Update the controller to make the model and view accessible
-        self.controller.model = self.model
-        self.controller.view = self.view
+        self.page.views.clear()
 
-    def build(self, page) -> None:
-        """
-        Convenience method that passes the build to the view.
+        for route in self.routes:
+            if route.is_dynamic():
+                template_route = TemplateRoute(self.page.route)
 
-        :param page: ft.Page:
-            The page that is passed via ft.app(target=page).  You need to set this method as the target parameter.
-            The method will be called passing the page parameter.  The page is the Flet page that needs to be built.
+                if template_route.match(route.path):
+                    print(route.path)
+                    print(template_route.__getattribute__("country_name"))
 
+                    params = self.__inject_params(route.path, template_route)
+                    print(params)
+                    self.page.views.append(route.module.view.build(*params))
 
-        ft.app(target=my_flet_mvc_app.build)  # This will pass the page into this function
-        """
-        self.view.build(page)
+            elif route.path == e.page.route:
+                self.page.views.append(route.module.view.build())
+
+        self.page.update()
+
+    @staticmethod
+    def __inject_params(path: str, route: TemplateRoute):
+        params = []
+        elements = path.split("/")
+
+        for elem in elements:
+            if elem.startswith(":"):
+                params.append(route.__getattribute__(elem[1:]))
+
+        return params
+
+    def build(self, page: ft.Page):
+        print(page.route)
+
+        self.page = page
+        self.page.title = self.title
+
+        self.page.on_route_change = self.route_change
+        self.page.go(self.page.route)
 
     def run(self):
-        """
-        This is the start point for your application.  After you have created a FletMVCApp and passed
-        the Model, View and Controller class, you must start this application by calling the run() method.
-
-        :return: None
-
-        settings_app = FletMVCApplication(model_class=DemoModel,
-                                  view_class=DemoView,
-                                  controller_class=DemoController)
-
-        settings_app.run()
-
-        """
         ft.app(target=self.build)
-
