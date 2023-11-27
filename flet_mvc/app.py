@@ -1,13 +1,12 @@
 import flet as ft
 from flet_core import RouteChangeEvent, TemplateRoute
-from sqlalchemy import create_engine
 
 from flet_mvc.module import FletMVCModule
 from flet_mvc.route import FletMVCRoute
 
 
 class FletMVCApplication:
-    def __init__(self, title: str, window_width: int = 1600, window_height: int = 900):
+    def __init__(self, title: str = "", window_width: int = 1600, window_height: int = 900):
         """
         Constructor that creates a dummy page, which will later be detailed in the build method.
         Also creates the basic properties of the application, a placeholder for the database engine
@@ -17,7 +16,7 @@ class FletMVCApplication:
         self.window_width = window_width
         self.window_height = window_height
 
-        self.__engine: str = ""
+        self.__connection_string = ""
         self.__page: ft.Page = None  # noqa
         self.__routes: list[FletMVCRoute] = []
 
@@ -38,6 +37,8 @@ class FletMVCApplication:
         module.model.app = self
         module.view.app = self
         module.controller.app = self
+
+        module.model.bind_database(self.__connection_string)
 
         # add the new route
         route = FletMVCRoute(path=path, module=module)
@@ -121,7 +122,7 @@ class FletMVCApplication:
         self.__page.window_close()
 
     def bind_database(self, connection_string: str):
-        self.__engine = create_engine(connection_string, echo=True)
+        self.__connection_string = connection_string
 
     def change_theme_mode(self, mode: ft.ThemeMode) -> None:
         """
