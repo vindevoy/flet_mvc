@@ -13,5 +13,9 @@ class ContactRecord(DatabaseRecord):
     firstname: Mapped[str] = mapped_column(String(50))
     lastname: Mapped[str] = mapped_column(String(70))
 
+    @property
+    def fullname(self):
+        return f"{self.lastname.strip().upper()}, {self.firstname} "
+
     def __repr__(self) -> str:
-        return f"Contact(id={self.id}, login={self.login}, fullname={self.lastname.upper()}, {self.firstname})"
+        return f"Contact(id={self.id}, login={self.login}, fullname={self.fullname})"
