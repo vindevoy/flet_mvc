@@ -13,3 +13,12 @@ class ContactsController(FletMVCController):
 
         self.view.txt_selected_contact.value = f"Selected contact: {contact.fullname} #{contact.id}"
         self.view.txt_selected_contact.update()
+
+    def button_new_clicked(self, e: ft.ControlEvent):
+        pass
+
+    def button_edit_clicked(self, e: ft.ControlEvent):
+        pass
+
+    def button_delete_clicked(self, e: ft.ControlEvent):
+        pass
