@@ -119,6 +119,8 @@ class FletMVCApplication:
         """
         assert isinstance(e, ft.ControlEvent)
 
+        # TODO: ask if app can be closed
+        # TODO: check is data is saved before closing
         self.__page.window_close()
 
     def bind_database(self, connection_string: str):
