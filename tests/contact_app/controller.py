@@ -11,14 +11,25 @@ class ContactsController(FletMVCController):
         selected_id = int(e.control.cells[0].content.value)
         contact = self.model.get_by_id(selected_id)
 
-        self.view.txt_selected_contact.value = f"Selected contact: {contact.fullname} #{contact.id}"
-        self.view.txt_selected_contact.update()
+        self.view.txt_information.value = f"Selected contact: {contact.fullname} #{contact.id}"
+        self.view.txt_information.visible = True
+        self.view.btn_edit.disabled = False
+        self.view.btn_delete.disabled = False
 
-    def button_new_clicked(self, e: ft.ControlEvent):
+        self.app.refresh()
+
+    def button_new_clicked(self, _: ft.ControlEvent):
+        self.app.goto("/new")
+
+    def button_edit_clicked(self, _: ft.ControlEvent):
+        contact_id = self.view.txt_information.value.split("#")[1].strip()
+        self.app.goto(f"/edit/{contact_id}")
+
+    def button_delete_clicked(self, _: ft.ControlEvent):
         pass
 
-    def button_edit_clicked(self, e: ft.ControlEvent):
-        pass
+    def close_new_clicked(self, _: ft.ControlEvent):
+        self.app.goto("/")
 
-    def button_delete_clicked(self, e: ft.ControlEvent):
-        pass
+    def close_edit_clicked(self, _: ft.ControlEvent):
+        self.app.goto("/")
