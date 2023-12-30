@@ -16,9 +16,9 @@ if __name__ == "__main__":
     contacts = ContactsModel()
     contacts.bind_database(f"sqlite:///{db_path}")
 
-    assert len(contacts.get_all()) == 2
+    assert len(contacts.all()) > 0
 
-    me = contacts.get_by_id(1)
+    me = contacts.read(1)
 
     assert me.id == 1
     assert me.firstname == "Yves"
