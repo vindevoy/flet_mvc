@@ -15,13 +15,15 @@ class ContactsListView(FletMVCView):
         self.btn_delete = ft.Ref[ft.ElevatedButton]()
         self.btn_close = ft.Ref[ft.ElevatedButton]()
 
+        self.tbl_data = ft.Ref[ft.DataTable]()
+
     def build(self) -> ft.View:
         row_title = Forms.title("List of Contacts")
 
-        self.list_contacts = Forms.data_table(
+        self.list_contacts, self.tbl_data = Forms.data_table(
             ref=self.list_contacts,
             columns={"ID": "id", "Firstname": "firstname", "Lastname": "lastname", "Login": "login"},
-            data=self.model.get_all(),
+            data=self.model.all(),
             call_on_select_changed=self.controller.contacts_list_select_changed
         )
 
@@ -121,24 +123,46 @@ class ContactsRecordView(FletMVCView):
 
         row_buttons = Forms.right_aligned_row(controls=[self.btn_save, self.btn_cancel, self.btn_close])
 
-        if contact_id is not None:
-            contact = self.model.get_by_id(int(contact_id))
-
-            self.txt_id.value = contact.id
-            self.txt_login.value = contact.login
-            self.txt_firstname.value = contact.firstname
-            self.txt_lastname.value = contact.lastname
-            self.txt_email.value = contact.email
-            self.txt_address_1.value = contact.address_1
-            self.txt_address_2.value = contact.address_2
-            self.txt_postal_code.value = contact.postal_code
-            self.txt_city.value = contact.city
-            self.txt_country.value = contact.country
-            self.txt_phone.value = contact.phone
-            self.txt_mobile.value = contact.mobile
-            self.txt_fax.value = contact.fax
+        self.fill(contact_id=contact_id)
 
         return Forms.view(controls=[row_title, data_form, row_buttons])
+
+    def bind(self, contact):
+        contact.login = self.txt_login.value  # noqa
+        contact.firstname = self.txt_firstname.value  # noqa
+        contact.lastname = self.txt_lastname.value  # noqa
+        contact.email = self.txt_email.value  # noqa
+        contact.address_1 = self.txt_address_1.value  # noqa
+        contact.address_2 = self.txt_address_2.value  # noqa
+        contact.postal_code = self.txt_postal_code.value  # noqa
+        contact.city = self.txt_city.value  # noqa
+        contact.country = self.txt_country.value  # noqa
+        contact.phone = self.txt_phone.value  # noqa
+        contact.mobile = self.txt_mobile.value  # noqa
+        contact.fax = self.txt_fax.value  # noqa
+        # TODO: fix the warnings above
+
+        return contact
+
+    def fill(self, contact_id):
+        if contact_id is None:
+            return
+
+        contact = self.model.read(int(contact_id))
+
+        self.txt_id.value = contact.id
+        self.txt_login.value = contact.login
+        self.txt_firstname.value = contact.firstname
+        self.txt_lastname.value = contact.lastname
+        self.txt_email.value = contact.email
+        self.txt_address_1.value = contact.address_1
+        self.txt_address_2.value = contact.address_2
+        self.txt_postal_code.value = contact.postal_code
+        self.txt_city.value = contact.city
+        self.txt_country.value = contact.country
+        self.txt_phone.value = contact.phone
+        self.txt_mobile.value = contact.mobile
+        self.txt_fax.value = contact.fax
 
 
 class ContactsNewView(ContactsRecordView):

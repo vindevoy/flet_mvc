@@ -20,20 +20,30 @@ class FletMVCModel:
     def bind_database(self, connection_string: str):
         self.__connection_string = connection_string
 
-    def get_all(self):
-        with self._get_session() as session:
+    def all(self):
+        with self.__get_session() as session:
             return session.query(self.__record_type).all()
 
-    def get_by_id(self, item_id: int):
-        with self._get_session() as session:
-            return session.get(self.__record_type, item_id)
-
-    def add_record(self, record):
-        with self._get_session() as session:
+    def create(self, record):
+        with self.__get_session() as session:
             session.add(record)
             session.commit()
 
-    def _get_session(self):
+    def read(self, item_id: int):
+        with self.__get_session() as session:
+            return session.get(self.__record_type, item_id)
+
+    def update(self, record):
+        with self.__get_session() as session:
+            session.merge(record)
+            session.commit()
+
+    def delete(self, record):
+        with self.__get_session() as session:
+            session.delete(record)
+            session.commit()
+
+    def __get_session(self):
         engine = create_engine(self.__connection_string, echo=True)
         maker = sessionmaker(bind=engine)
         session = maker()

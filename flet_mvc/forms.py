@@ -65,13 +65,15 @@ class Forms:
             on_select_changed=call_on_select_changed
         ) for rec in data]
 
+        table = ft.DataTable(ref=ref, columns=cols, rows=rows)
+
         return ft.ResponsiveRow(
             controls=[ft.Card(
-                content=ft.DataTable(ref=ref, columns=cols, rows=rows),
+                content=table,
                 col=12)],
             col=12,
             expand=True  # Expands this vertically to take the whole screen
-        )
+        ), table
 
     @classmethod
     def data_form(cls, rows: list[list[ft.Control]], ref: ft.Ref = None):

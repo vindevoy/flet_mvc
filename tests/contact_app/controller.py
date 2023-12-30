@@ -10,7 +10,7 @@ class ContactsController(FletMVCController):
 
     def contacts_list_select_changed(self, e: ft.ControlEvent):
         selected_id = int(e.control.cells[0].content.value)
-        contact = self.model.get_by_id(selected_id)
+        contact = self.model.read(selected_id)
 
         self.view.txt_selected_contact.value = str(contact.id)
         self.view.btn_edit.text = f"Edit #{selected_id}"
@@ -28,30 +28,44 @@ class ContactsController(FletMVCController):
         self.app.goto(f"/edit/{contact_id}")
 
     def button_delete_clicked(self, _: ft.ControlEvent):
-        pass
+        contact = self.model.read(int(self.view.txt_selected_contact.value))
+        self.model.delete(contact)
+
+        columns = {"ID": "id", "Firstname": "firstname", "Lastname": "lastname", "Login": "login"}
+        fields = columns.values()
+        rows = [ft.DataRow(
+            cells=[ft.DataCell(ft.Text(getattr(rec, fld))) for fld in fields],
+            on_select_changed=self.contacts_list_select_changed
+        ) for rec in self.model.all()]
+
+        self.view.tbl_data.rows = rows
+        # TODO: this must become a method hiding this complexity
+
+        self.view.btn_edit.text = "Edit"
+        self.view.btn_edit.disabled = True
+        self.view.btn_delete.text = "Delete"
+        self.view.btn_delete.disabled = True
+
+        self.app.refresh()
 
     def save_new_clicked(self, _: ft.ControlEvent):
-        contact = ContactRecord(
-            login = self.view.txt_login.value,
-            firstname = self.view.txt_firstname.value,
-            lastname = self.view.txt_lastname.value,
-            email = self.view.txt_email.value,
-            address_1 = self.view.txt_address_1.value,
-            address_2 = self.view.txt_address_2.value,
-            postal_code = self.view.txt_postal_code.value,
-            city = self.view.txt_city.value,
-            country = self.view.txt_country.value,
-            phone = self.view.txt_phone.value,
-            mobile = self.view.txt_mobile.value,
-            fax = self.view.txt_fax.value)
+        contact = ContactRecord()
+        contact = self.view.bind(contact)
 
-        self.model.add_record(contact)
+        self.model.create(contact)
+
+        self.app.goto("/")
 
     def cancel_new_clicked(self, _: ft.ControlEvent):
         self.app.goto("/")
 
     def save_edit_clicked(self, _: ft.ControlEvent):
-        pass
+        contact = self.model.read(int(self.view.txt_id.value))
+        contact = self.view.bind(contact)
+
+        self.model.update(contact)
+
+        self.app.goto("/")
 
     def cancel_edit_clicked(self, _: ft.ControlEvent):
         self.app.goto("/")
