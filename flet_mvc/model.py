@@ -28,6 +28,11 @@ class FletMVCModel:
         with self._get_session() as session:
             return session.get(self.__record_type, item_id)
 
+    def add_record(self, record):
+        with self._get_session() as session:
+            session.add(record)
+            session.commit()
+
     def _get_session(self):
         engine = create_engine(self.__connection_string, echo=True)
         maker = sessionmaker(bind=engine)

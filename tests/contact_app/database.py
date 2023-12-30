@@ -12,6 +12,15 @@ class ContactRecord(DatabaseRecord):
     login: Mapped[str] = mapped_column(String(30))
     firstname: Mapped[str] = mapped_column(String(50))
     lastname: Mapped[str] = mapped_column(String(70))
+    email: Mapped[str] = mapped_column(String(250))
+    address_1: Mapped[str] = mapped_column(String(250))
+    address_2: Mapped[str] = mapped_column(String(250))
+    postal_code: Mapped[str] = mapped_column(String(15))
+    city: Mapped[str] = mapped_column(String(200))
+    country: Mapped[str] = mapped_column(String(100))
+    phone: Mapped[str] = mapped_column(String(30))
+    mobile: Mapped[str] = mapped_column(String(30))
+    fax: Mapped[str] = mapped_column(String(30))
 
     @property
     def fullname(self):

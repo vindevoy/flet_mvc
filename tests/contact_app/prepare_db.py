@@ -20,11 +20,16 @@ DatabaseRecord.metadata.create_all(engine)
 with Session(engine) as session:
     me = ContactRecord(login="vindevoy",
                        firstname="Yves",
-                       lastname="Vindevogel")
+                       lastname="Vindevogel",
+                       email="yves@vindevogel.net",
+                       address_1="Nederenamestraat 15",
+                       address_2="",
+                       postal_code="9700",
+                       city="Oudenaarde",
+                       country="Belgium",
+                       phone="",
+                       mobile="+32 497 57 08 96",
+                       fax="")
 
-    son = ContactRecord(login="nivinog",
-                        firstname="Niels",
-                        lastname="Vindevogel")
-
-    session.add_all([me, son])
+    session.add(me)
     session.commit()

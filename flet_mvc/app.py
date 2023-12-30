@@ -6,7 +6,8 @@ from flet_mvc.route import FletMVCRoute
 
 
 class FletMVCApplication:
-    def __init__(self, title: str = "", window_width: int = 1600, window_height: int = 900):
+    def __init__(self, title: str = "", window_width: int = 1600, window_height: int = 900,
+                 window_min_width: int = 1600, window_min_height: int = 900):
         """
         Constructor that creates a dummy page, which will later be detailed in the build method.
         Also creates the basic properties of the application, a placeholder for the database engine
@@ -15,6 +16,8 @@ class FletMVCApplication:
         self.title: str = title
         self.window_width = window_width
         self.window_height = window_height
+        self.window_min_width = window_min_width
+        self.window_min_height = window_min_height
 
         self.__connection_string = ""
         self.__page: ft.Page = None  # noqa
@@ -51,6 +54,7 @@ class FletMVCApplication:
         :return: None
         """
         ft.app(target=self.__build)
+        # view=ft.AppView.WEB_BROWSER
 
     def goto(self, path: str):
         """
@@ -154,6 +158,10 @@ class FletMVCApplication:
 
         self.__page.window_width = self.window_width
         self.__page.window_height = self.window_height
+        self.__page.scroll = ft.ScrollMode.AUTO
+
+        self.__page.window_min_width = self.window_min_width
+        self.__page.window_min_height = self.window_min_height
 
         self.__page.on_route_change = self.__route_change
         self.__page.go(self.__page.route)
